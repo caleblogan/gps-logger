@@ -1,0 +1,11 @@
+.Menu {
+    overflow-y: hidden;
+    overflow-x: hidden;
+    height: 100vh;
+    /*margin-top: 12px !important;*/
+}
+
+.infoMenu {
+    border-radius: 0 !important;
+    margin: 0 !important;
+}
