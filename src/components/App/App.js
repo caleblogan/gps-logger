@@ -13,11 +13,18 @@ class App extends Component {
     super(props)
     this.state = {
       isMenuOpen: true,
-      activeLog: {},
+      activeLog: {coords: []},
       logs: [
-        {id: 0, name: 'log 0'},
-        {id: 1, name: 'log 1'},
-        {id: 2, name: 'log 2'},
+        {id: 0, name: 'log 0', coords: [
+          {
+            coords: {latitude: 51.507351, longitude: -0.127758},
+          },
+          {
+            coords: {latitude: 52.507351, longitude: -0.147758},
+          },
+        ]},
+        {id: 1, name: 'log 1', coords: []},
+        {id: 2, name: 'log 2', coords: []},
       ],
       geolocationWatchID: null,
       isGeolocationEnabled: true,
@@ -34,7 +41,6 @@ class App extends Component {
   componentDidMount() {
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition(position => {
-        console.log(position.coords.latitude, position.coords.longitude);
         this.setState({currentLocation: position.coords})
       }, error => {
         console.log('geo not accepted;', error)
@@ -50,9 +56,12 @@ class App extends Component {
     }
   }
 
-  handleItemClick(e, log) {
-    console.log(log)
-    this.setState({ activeLog: log})
+  handleItemClick(e, logElem) {
+    for (let log of this.state.logs) {
+      if (log.id === logElem.id) {
+        this.setState({ activeLog: log})
+      }
+    }
   }
 
   handleAddNewLog(log) {
@@ -61,7 +70,8 @@ class App extends Component {
         ...prevState.logs,
         {
           id: Math.floor(Math.random() * 20000),
-          name: log
+          name: log,
+          coords: []
         }
       ]
     }))
@@ -76,8 +86,9 @@ class App extends Component {
     if (this.state.geolocationWatchID) {
       navigator.geolocation.clearWatch(this.state.geolocationWatchID);
     }
+    const log = this.state.activeLog;
     const watchID = navigator.geolocation.watchPosition(position => {
-      console.log(position.coords.latitude, position.coords.longitude);
+      log.coords.push(position)
       this.setState({currentLocation: position.coords})
     });
     this.setState({geolocationWatchID: watchID})
@@ -121,7 +132,7 @@ class App extends Component {
             </Grid.Column>
           }
           <Grid.Column width={isMenuOpen ? 12 : 16} className={styles.Col}>
-            <MapContainer/>
+            <MapContainer coords={this.state.activeLog.coords}/>
           </Grid.Column>
         </Grid.Row>
       </Grid>
