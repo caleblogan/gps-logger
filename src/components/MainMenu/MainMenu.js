@@ -20,7 +20,6 @@ class MainMenu extends Component {
 
   handleSearchChange(event) {
     this.setState({searchValue: event.target.value})
-    console.log(event.target.value)
   }
 
   filteredLogs() {
@@ -32,12 +31,10 @@ class MainMenu extends Component {
 
   handleDeleteLog(event) {
     event.preventDefault()
-    console.log(event)
-
   }
 
   render() {
-    const { activeLog } = this.props
+    const { activeLog, currentLocation } = this.props
     return (
       <div className={styles.Menu}>
         <Menu fluid inverted vertical className={styles.infoMenu}>
@@ -48,7 +45,7 @@ class MainMenu extends Component {
                 <br />
                 <br />
                 <p>
-                  Current Location: <br /> {this.props.currentLocation.latitude}, {this.props.currentLocation.longitude}
+                  Current Location: <br /> {currentLocation.latitude}, {currentLocation.longitude}
                 </p>
                 <br />
                 <Button.Group>
@@ -56,20 +53,20 @@ class MainMenu extends Component {
                   <Button positive onClick={this.props.startRecording}>start</Button>
                   <Button onClick={this.props.stopRecording}>stop</Button>
                 </Button.Group>
-                <br/>
                 <br />
-                <a href='#' onClick={this.handleDeleteLog}>delete</a> |
+                <br />
+                <a href='#' onClick={this.handleDeleteLog}>delete</a>{' '}
                 <a href='#'>edit</a>
               </div>
             ) : (
-              <span/>
+              <div>No log selected</div>
             )
             }
           </Menu.Item>
+          <NewLog onSave={this.props.handleAddNewLog}/>
           <Menu.Item>
             <LogFilter onChange={this.handleSearchChange} value={this.state.searchValue} />
           </Menu.Item>
-          <NewLog onSave={this.props.handleAddNewLog}/>
         </Menu>
         <LogMenu activeItem={activeLog.id} logs={this.filteredLogs()} onClick={this.props.handleItemClick}/>
       </div>
@@ -77,8 +74,9 @@ class MainMenu extends Component {
   }
 }
 
-MainMenu.propTypes = {
 
+
+MainMenu.propTypes = {
 };
 
 export default MainMenu;

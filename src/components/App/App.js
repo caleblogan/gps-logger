@@ -81,16 +81,13 @@ class App extends Component {
   }
 
   startRecording() {
-    console.log('start')
-    const log = this.state.activeLog;
     this.geoTracker.startWatching(position => {
-      log.coords.push(position)
+      this.state.activeLog.coords.push(position)
       this.setState({currentLocation: position.coords})
     })
   }
 
   stopRecording() {
-    console.log('stop')
     this.geoTracker.stopWatching()
   }
 
@@ -144,12 +141,6 @@ class App extends Component {
       </Grid>
     );
   }
-}
-
-
-const noSpacing = {
-  padding: 0,
-  margin: 0
 }
 
 App.propTypes = {};

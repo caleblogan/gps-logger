@@ -1,6 +1,6 @@
 export default class GeoTracker {
   constructor() {
-    this._geolocationWatchID = null;
+    this._watchID = null;
   }
 
   /**
@@ -18,42 +18,24 @@ export default class GeoTracker {
     })
   }
 
-
   /**
    * Watches the users current location. Calls the cb function when location changes.
    * @param cb
    */
   startWatching(cb) {
-    if (this.geolocationWatchID) {
-      navigator.geolocation.clearWatch(this.geolocationWatchID);
+    if (this._watchID) {
+      navigator.geolocation.clearWatch(this._watchID);
     }
-    this.geolocationWatchID = navigator.geolocation.watchPosition(cb);
+    this._watchID = navigator.geolocation.watchPosition(cb);
   }
 
   stopWatching() {
-    navigator.geolocation.clearWatch(this.geolocationWatchID);
-    this.geolocationWatchID = null;
+    navigator.geolocation.clearWatch(this._watchID);
+    this._watchID = null;
   }
 
   isAvailable() {
     return 'geolocation' in navigator;
-  }
-
-  __errors() {
-    let _errors = [];
-    if (this.showNotAvailableError()) {
-      _errors.push({
-        message: 'Geolocation is not available in this browser. Please try a new browser like Chrome.',
-        onDismiss: this.disableAvailableError
-      })
-    }
-    if (this.showNotEnabledError()) {
-      _errors.push({
-        message: 'Geolocation is currently disabled. Turn it on first to start recording.',
-        onDismiss: this.disableEnabledError
-      })
-    }
-    return _errors;
   }
 
 }
