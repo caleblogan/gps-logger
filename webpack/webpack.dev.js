@@ -10,8 +10,9 @@ const devConfig = merge([{
   devServer: {
     historyApiFallback: true,
     contentBase: './dist',
-    hot: true
+    hot: true,
   },
+  devtool: 'cheap-module-eval-source-map',
   module: {
     rules: [
       // {

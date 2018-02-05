@@ -7,6 +7,7 @@ import styles from './App.css';
 import MainMenu from "../MainMenu/MainMenu";
 import MapContainer from "../MapContainer/MapContainer";
 import ErrorBox from "../ErrorBox/ErrorBox";
+import GeoTracker from "../../lib/geo";
 
 class App extends Component {
   constructor(props) {
@@ -26,32 +27,34 @@ class App extends Component {
         {id: 1, name: 'log 1', coords: []},
         {id: 2, name: 'log 2', coords: []},
       ],
-      geolocationWatchID: null,
+      currentLocation: {},
       isGeolocationEnabled: true,
       isGeolocationAvailable: true,
-      showGeolocationEnabledError: true,
-      showGeolocationAvailableError: true,
-      currentLocation: null,
+      geoAvailableDissmissed: false,
+      geoEnabledDissmissed: false,
     }
 
+    this.geoTracker = new GeoTracker()
     this.handleItemClick = this.handleItemClick.bind(this);
     this.handleAddNewLog = this.handleAddNewLog.bind(this);
   }
 
   componentDidMount() {
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(position => {
-        this.setState({currentLocation: position.coords})
-      }, error => {
-        console.log('geo not accepted;', error)
-        this.setState({
-          isGeolocationEnabled: false,
+    if (this.geoTracker.isAvailable()) {
+      this.geoTracker.attemptToEnable()
+        .then(coords => {
+          console.log('enabled')
         })
-      });
+        .catch(error => {
+          this.setState({
+            isGeolocationEnabled: false
+          })
+        })
     } else {
-      console.log('geolocation not available')
+      console.log('geolocation is not available')
       this.setState({
-        isGeolocationAvailable: false
+        isGeolocationAvailable: false,
+        isGeolocationEnabled: false
       })
     }
   }
@@ -77,27 +80,30 @@ class App extends Component {
     }))
   }
 
-  handleDismiss() {
-    this.setState({showGeolocationAvailableError: false})
-  }
-
   startRecording() {
     console.log('start')
-    if (this.state.geolocationWatchID) {
-      navigator.geolocation.clearWatch(this.state.geolocationWatchID);
-    }
     const log = this.state.activeLog;
-    const watchID = navigator.geolocation.watchPosition(position => {
+    this.geoTracker.startWatching(position => {
       log.coords.push(position)
       this.setState({currentLocation: position.coords})
-    });
-    this.setState({geolocationWatchID: watchID})
+    })
   }
 
   stopRecording() {
     console.log('stop')
-    navigator.geolocation.clearWatch(this.state.geolocationWatchID);
-    this.setState({geolocationWatchID: null})
+    this.geoTracker.stopWatching()
+  }
+
+  dismissGeoAvailableError() {
+    this.setState({
+      geoAvailableDissmissed: true
+    })
+  }
+
+  dismissGeoEnabledError() {
+    this.setState({
+      geoEnabledDissmissed: true
+    })
   }
 
   render() {
@@ -105,16 +111,16 @@ class App extends Component {
     return (
       <Grid className={styles.Grid}>
         <ErrorBox>
-        {!this.state.isGeolocationAvailable && this.state.showGeolocationAvailableError &&
-          <Message warning onDismiss={()=>this.handleDismiss()}>
-            <Message.Header>Geolocation is not available in this browser. Please try a new browser like Chrome.</Message.Header>
-          </Message>
-        }
-        {!this.state.isGeolocationEnabled && this.state.showGeolocationEnabledError &&
-          <Message warning onDismiss={()=>this.handleDismiss()}>
-            <Message.Header>Geolocation is currently disabled. Turn it on first to start recording.</Message.Header>
-          </Message>
-        }
+          {!this.state.isGeolocationAvailable && !this.state.geoAvailableDissmissed &&
+            <Message warning onDismiss={() => this.dismissGeoAvailableError()}>
+              <Message.Header>Sorry, geolocation is not available in your browser.</Message.Header>
+            </Message>
+          }
+          {!this.state.isGeolocationEnabled && !this.state.geoEnabledDissmissed &&
+            <Message warning onDismiss={() => this.dismissGeoEnabledError()}>
+              <Message.Header>Geolocation is not enabled. Please enable it in your settings and reload your browser.</Message.Header>
+            </Message>
+          }
         </ErrorBox>
         <Grid.Row className={styles.Row}>
           {

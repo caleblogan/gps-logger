@@ -33,6 +33,7 @@ class MainMenu extends Component {
   handleDeleteLog(event) {
     event.preventDefault()
     console.log(event)
+
   }
 
   render() {
@@ -51,8 +52,9 @@ class MainMenu extends Component {
                 </p>
                 <br />
                 <Button.Group>
+
                   <Button positive onClick={this.props.startRecording}>start</Button>
-                  <Button negative onClick={this.props.stopRecording}>stop</Button>
+                  <Button onClick={this.props.stopRecording}>stop</Button>
                 </Button.Group>
                 <br/>
                 <br />

@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {CircleMarker, Map, Marker, Polyline, Popup, TileLayer} from 'react-leaflet'
 
-// import '../../../node_modules/leaflet/dist/leaflet.css';
 import styles from './MapContainer.css'
 
 const position = [51.505, -0.09]
@@ -24,16 +23,10 @@ class MapContainer extends Component {
     this.setState({positions})
   }
 
-  // shouldComponentUpdate(nextProps) {
-  //   return nextProps.coords !== this.props.coords;
-  // }
-
   render() {
-    console.log('rendering')
-
     return (
       <div className={styles.MapContainer}>
-       <Map className={styles.Map} center={position} zoom={13}>
+       <Map className={styles.Map} center={position} zoom={5}>
          <TileLayer
            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
            attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
