@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux'
 
 import {Grid, Message} from 'semantic-ui-react';
 
@@ -8,87 +9,37 @@ import MainMenu from "../MainMenu/MainMenu";
 import MapContainer from "../MapContainer/MapContainer";
 import ErrorBox from "../ErrorBox/ErrorBox";
 import GeoTracker from "../../lib/geo";
+import {
+  setGeolocationAvailable,
+  setGeolocationEnabled
+} from "../../actions";
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
       isMenuOpen: true,
-      activeLog: {coords: []},
-      logs: [
-        {id: 0, name: 'log 0', coords: [
-          {
-            coords: {latitude: 51.507351, longitude: -0.127758},
-          },
-          {
-            coords: {latitude: 52.507351, longitude: -0.147758},
-          },
-        ]},
-        {id: 1, name: 'log 1', coords: []},
-        {id: 2, name: 'log 2', coords: []},
-      ],
-      currentLocation: {},
-      isGeolocationEnabled: true,
-      isGeolocationAvailable: true,
       geoAvailableDissmissed: false,
       geoEnabledDissmissed: false,
     }
 
     this.geoTracker = new GeoTracker()
-    this.handleItemClick = this.handleItemClick.bind(this);
-    this.handleAddNewLog = this.handleAddNewLog.bind(this);
   }
 
   componentDidMount() {
     if (this.geoTracker.isAvailable()) {
       this.geoTracker.attemptToEnable()
-        .then(coords => {
-          console.log('enabled')
+        .then(() => {
+          console.log('geolocation is enabled')
         })
-        .catch(error => {
-          this.setState({
-            isGeolocationEnabled: false
-          })
+        .catch(() => {
+          this.props.dispatch(setGeolocationEnabled(false))
         })
     } else {
       console.log('geolocation is not available')
-      this.setState({
-        isGeolocationAvailable: false,
-        isGeolocationEnabled: false
-      })
+      this.props.dispatch(setGeolocationAvailable(false))
+      this.props.dispatch(setGeolocationEnabled(false))
     }
-  }
-
-  handleItemClick(e, logElem) {
-    for (let log of this.state.logs) {
-      if (log.id === logElem.id) {
-        this.setState({ activeLog: log})
-      }
-    }
-  }
-
-  handleAddNewLog(log) {
-    this.setState(prevState => ({
-      logs: [
-        ...prevState.logs,
-        {
-          id: Math.floor(Math.random() * 20000),
-          name: log,
-          coords: []
-        }
-      ]
-    }))
-  }
-
-  startRecording() {
-    this.geoTracker.startWatching(position => {
-      this.state.activeLog.coords.push(position)
-      this.setState({currentLocation: position.coords})
-    })
-  }
-
-  stopRecording() {
-    this.geoTracker.stopWatching()
   }
 
   dismissGeoAvailableError() {
@@ -104,16 +55,17 @@ class App extends Component {
   }
 
   render() {
-    const {isMenuOpen} = this.state
+    const {isMenuOpen, geoAvailableDissmissed, geoEnabledDissmissed} = this.state
+    const {isGeolocationAvailable, isGeolocationEnabled} = this.props
     return (
       <Grid className={styles.Grid}>
         <ErrorBox>
-          {!this.state.isGeolocationAvailable && !this.state.geoAvailableDissmissed &&
+          {!isGeolocationAvailable && !geoAvailableDissmissed &&
             <Message warning onDismiss={() => this.dismissGeoAvailableError()}>
               <Message.Header>Sorry, geolocation is not available in your browser.</Message.Header>
             </Message>
           }
-          {!this.state.isGeolocationEnabled && !this.state.geoEnabledDissmissed &&
+          {!isGeolocationEnabled && !geoEnabledDissmissed &&
             <Message warning onDismiss={() => this.dismissGeoEnabledError()}>
               <Message.Header>Geolocation is not enabled. Please enable it in your settings and reload your browser.</Message.Header>
             </Message>
@@ -123,19 +75,11 @@ class App extends Component {
           {
             isMenuOpen &&
             <Grid.Column width={4} className={styles.Col}>
-              <MainMenu
-                activeLog={this.state.activeLog}
-                logs={this.state.logs}
-                handleItemClick={this.handleItemClick}
-                handleAddNewLog={this.handleAddNewLog}
-                startRecording={this.startRecording.bind(this)}
-                stopRecording={this.stopRecording.bind(this)}
-                currentLocation={this.state.currentLocation}
-              />
+              <MainMenu geoTracker={this.geoTracker} />
             </Grid.Column>
           }
           <Grid.Column width={isMenuOpen ? 12 : 16} className={styles.Col}>
-            <MapContainer coords={this.state.activeLog.coords}/>
+            <MapContainer />
           </Grid.Column>
         </Grid.Row>
       </Grid>
@@ -145,4 +89,13 @@ class App extends Component {
 
 App.propTypes = {};
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    isGeolocationEnabled: state.isGeolocationEnabled,
+    isGeolocationAvailable: state.isGeolocationAvailable,
+  }
+}
+
+const AppContainer = connect(mapStateToProps)(App)
+
+export default AppContainer

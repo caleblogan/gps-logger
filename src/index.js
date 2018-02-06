@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+
+import geoApp from './reducers';
 
 import '../semantic/dist/semantic.css';
 import styles from './index.css';
@@ -12,10 +16,14 @@ let root = document.createElement('root');
 root.id = 'root';
 document.body.appendChild(root);
 
+let store = createStore(geoApp);
+
 const render = Component => {
   ReactDOM.render(
     <AppContainer>
-      <Component />
+      <Provider store={store}>
+        <Component />
+      </Provider>
     </AppContainer>,
     root
   )

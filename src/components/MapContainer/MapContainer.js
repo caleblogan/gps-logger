@@ -1,46 +1,42 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux'
+
 import {CircleMarker, Map, Marker, Polyline, Popup, TileLayer} from 'react-leaflet'
 
 import styles from './MapContainer.css'
 
-const position = [51.505, -0.09]
+const viewCenter = [51.505, -0.09];
+const zoom = 5;
 
 class MapContainer extends Component {
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      positions: []
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    let positions = nextProps.coords.map(position => {
+  getPositions(logs) {
+    return logs.coords.map(position => {
       let {latitude, longitude} = position.coords
       return [latitude, longitude]
     })
-    this.setState({positions})
   }
 
   render() {
+    const positions = this.getPositions(this.props.logs)
     return (
       <div className={styles.MapContainer}>
-       <Map className={styles.Map} center={position} zoom={5}>
+       <Map className={styles.Map} center={viewCenter} zoom={zoom}>
          <TileLayer
            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
            attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
          />
-         <Polyline color="lime" positions={this.state.positions} />
-         {this.state.positions.length &&
-         <CircleMarker center={this.state.positions[0]} color="red" radius={8}>
+         <Polyline color="lime" positions={positions} />
+         {positions.length &&
+         <CircleMarker center={positions[0]} color="red" radius={8}>
            <Popup>
              <span>Start</span>
            </Popup>
          </CircleMarker>
          }
-         {this.state.positions.length > 1 &&
-         <CircleMarker center={this.state.positions.slice(-1)[0]} color="green" radius={8}>
+         {positions.length > 1 &&
+         <CircleMarker center={positions.slice(-1)[0]} color="green" radius={8}>
            <Popup>
              <span>End</span>
            </Popup>
@@ -54,4 +50,19 @@ class MapContainer extends Component {
 
 MapContainer.propTypes = {};
 
-export default MapContainer;
+function getActiveLogs(activeLogID, logs) {
+  for (let log of logs) {
+    if (log.id === activeLogID) {
+      return log
+    }
+  }
+}
+const mapStateToProps = state => {
+  return {
+    logs: getActiveLogs(state.activeLogID, state.logs)
+  }
+}
+
+const Container = connect(mapStateToProps)(MapContainer)
+
+export default Container;
