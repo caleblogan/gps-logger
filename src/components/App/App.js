@@ -12,7 +12,7 @@ import GeoTracker from "../../lib/geo";
 import {
   setGeolocationAvailable,
   setGeolocationEnabled
-} from "../../actions";
+} from "../../actions/geoLoggerActions";
 
 class App extends Component {
   constructor(props) {

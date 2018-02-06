@@ -8,7 +8,8 @@ import {Menu, Icon, Modal, Button} from 'semantic-ui-react';
 import LogMenu from "./LogMenu";
 import LogFilter from "./LogFilter";
 import NewLog from "./NewLog";
-import {addLog, addLogPosition, setActiveLog, setCurrentLocation} from "../../actions";
+import {addLog, addLogPosition} from "../../actions/logActions";
+import {setActiveLog, setCurrentLocation} from "../../actions/geoLoggerActions";
 
 class MainMenu extends Component {
   constructor(props) {
