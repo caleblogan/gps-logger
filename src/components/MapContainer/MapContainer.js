@@ -57,9 +57,10 @@ function getActiveLogs(activeLogID, logs) {
     }
   }
 }
+
 const mapStateToProps = state => {
   return {
-    logs: getActiveLogs(state.activeLogID, state.logs)
+    logs: getActiveLogs(state.geoLogger.activeLogID, state.logs)
   }
 }
 

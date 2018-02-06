@@ -45,9 +45,8 @@ class MainMenu extends Component {
   }
 
   startRecording() {
-    console.log(this.props.geoTracker)
     this.props.geoTracker.startWatching(position => {
-      this.props.dispatch(addLogPosition(position));
+      this.props.dispatch(addLogPosition(position, this.props.activeLogID));
       this.props.dispatch(setCurrentLocation(position.coords))
     })
   }
@@ -118,8 +117,9 @@ function getActiveLog(activeLogID, logs) {
 const mapStateToProps = state => {
   return {
     logs: state.logs,
-    activeLog: getActiveLog(state.activeLogID, state.logs),
-    currentLocation: state.currentLocation,
+    activeLogID: state.geoLogger.activeLogID,
+    activeLog: getActiveLog(state.geoLogger.activeLogID, state.logs),
+    currentLocation: state.geoLogger.currentLocation,
   }
 }
 

@@ -91,8 +91,8 @@ App.propTypes = {};
 
 const mapStateToProps = state => {
   return {
-    isGeolocationEnabled: state.isGeolocationEnabled,
-    isGeolocationAvailable: state.isGeolocationAvailable,
+    isGeolocationEnabled: state.geoSettings.isGeolocationEnabled,
+    isGeolocationAvailable: state.geoSettings.isGeolocationAvailable,
   }
 }
 

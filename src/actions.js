@@ -38,10 +38,11 @@ export function addLog(name) {
   }
 }
 
-export function addLogPosition(position) {
+export function addLogPosition(position, logID) {
   return {
     type: actionTypes.ADD_POSITION_TO_LOG,
-    position
+    position,
+    logID
   }
 }
 
