@@ -18,7 +18,7 @@ const config = {
           loader: 'babel-loader',
           options: {
             presets: [['env', {"modules": false}], 'react'],
-            plugins: ['transform-object-rest-spread', 'react-hot-loader/babel']
+            plugins: ['transform-decorators', 'transform-object-rest-spread', 'react-hot-loader/babel']
           }
         }
       },

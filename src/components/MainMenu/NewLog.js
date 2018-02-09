@@ -14,6 +14,7 @@ class NewLog extends React.Component {
     this.close = this.close.bind(this);
     this.handleSave = this.handleSave.bind(this);
     this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   open() {
@@ -41,6 +42,12 @@ class NewLog extends React.Component {
     this.setState({name: event.target.value, nameFieldError: false})
   }
 
+  handleKeyPress(event) {
+    if (event.key === 'Enter') {
+      this.handleSave()
+    }
+  }
+
   render() {
     return (
       <Modal
@@ -49,8 +56,11 @@ class NewLog extends React.Component {
       >
         <Modal.Header>Create New Log</Modal.Header>
         <Modal.Content>
-          <Input onChange={this.handleNameChange} value={this.state.name} label='Log Name' placeholder='My super gps route'
-                 error={this.state.nameFieldError}
+          <Input
+            onKeyPress={this.handleKeyPress} onChange={this.handleNameChange}
+            value={this.state.name} label='Log Name' placeholder='My super gps route'
+            error={this.state.nameFieldError}
+            autoFocus
           />
         </Modal.Content>
         <Modal.Actions>

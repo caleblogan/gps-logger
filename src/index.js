@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
 
 import geoApp from './reducers';
 
@@ -16,7 +17,13 @@ let root = document.createElement('root');
 root.id = 'root';
 document.body.appendChild(root);
 
-let store = createStore(geoApp);
+// let store = createStore(geoApp);
+const store = createStore(
+  geoApp,
+  applyMiddleware(thunk)
+);
+
+
 
 const render = Component => {
   ReactDOM.render(

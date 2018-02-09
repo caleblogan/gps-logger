@@ -19,7 +19,7 @@ class MainMenu extends Component {
     }
 
     this.handleSearchChange = this.handleSearchChange.bind(this);
-    this.handleItemClick = this.handleItemClick.bind(this);
+    this.handleLogItemClick = this.handleLogItemClick.bind(this);
     this.handleAddNewLog = this.handleAddNewLog.bind(this);
     this.startRecording = this.startRecording.bind(this);
     this.stopRecording = this.stopRecording.bind(this);
@@ -37,14 +37,6 @@ class MainMenu extends Component {
     return filteredIDS.map(logID => this.props.logs[logID])
   }
 
-  handleItemClick(e, logElem) {
-    this.props.dispatch(setActiveLog(logElem.id))
-  }
-
-  handleAddNewLog(name) {
-    this.props.dispatch(addLog(name))
-  }
-
   startRecording() {
     this.props.geoTracker.startWatching(position => {
       this.props.dispatch(addLogPosition(position, this.props.activeLogID));
@@ -54,6 +46,14 @@ class MainMenu extends Component {
 
   stopRecording() {
     this.props.geoTracker.stopWatching()
+  }
+
+  handleLogItemClick(e, logID) {
+    this.props.dispatch(setActiveLog(logID))
+  }
+
+  handleAddNewLog(name) {
+    this.props.dispatch(addLog(name))
   }
 
   handleDeleteLog(event) {
@@ -99,7 +99,7 @@ class MainMenu extends Component {
             <LogFilter onChange={this.handleSearchChange} value={this.state.searchValue} />
           </Menu.Item>
         </Menu>
-        <LogMenu activeItem={activeLog.id} logs={this.filteredLogs()} onClick={this.handleItemClick}/>
+        <LogMenu activeItem={activeLog.id} logs={this.filteredLogs()} onClick={this.handleLogItemClick}/>
       </div>
     )
   }
