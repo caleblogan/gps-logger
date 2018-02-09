@@ -11,6 +11,7 @@ import '../semantic/dist/semantic.css';
 import styles from './index.css';
 
 import App from './components/App/App';
+import api from './api/apiClient'
 
 
 let root = document.createElement('root');
@@ -20,7 +21,8 @@ document.body.appendChild(root);
 // let store = createStore(geoApp);
 const store = createStore(
   geoApp,
-  applyMiddleware(thunk)
+  // applyMiddleware(thunk),
+  applyMiddleware(thunk.withExtraArgument(api))
 );
 
 
