@@ -47,6 +47,7 @@ export default class ApiClient {
     return this.api.post(`/auth/logout/`)
       .then((response) => {
         this.token = null
+        console.log('ttttttttttttttttttt set', this.token)
         return Promise.resolve(response)
       })
   }

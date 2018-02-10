@@ -4,6 +4,7 @@ import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
+import logger from 'redux-logger'
 
 import geoApp from './reducers';
 
@@ -19,9 +20,16 @@ let root = document.createElement('root');
 root.id = 'root';
 document.body.appendChild(root);
 
+
+
+
 const store = createStore(
   geoApp,
-  applyMiddleware(apiMiddleware(new ApiClient()), thunk)
+  applyMiddleware(
+    // logger,
+    apiMiddleware(new ApiClient()),
+    thunk
+  )
 );
 
 

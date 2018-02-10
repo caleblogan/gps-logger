@@ -1,3 +1,5 @@
+import * as utils from "../lib/utils";
+
 export const actionTypes = {
   SET_TOKEN: 'SET_TOKEN',
   LOGIN_FETCH: 'LOGIN_FETCH',
@@ -9,6 +11,7 @@ export const actionTypes = {
 }
 
 export function setToken(token) {
+  utils.storagePut('token', token)
   return {
     type: actionTypes.SET_TOKEN,
     token: token
