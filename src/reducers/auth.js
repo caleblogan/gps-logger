@@ -1,6 +1,9 @@
 import {actionTypes} from '../actions/authActions';
+import * as utils from "../lib/utils";
 
-export const token = (state = null, action) => {
+const defaultToken  = utils.storageGet('token')
+
+export const token = (state = defaultToken, action) => {
   switch (action.type) {
     case actionTypes.SET_TOKEN:
       console.log('setting token')
