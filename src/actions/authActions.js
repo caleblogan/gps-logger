@@ -16,35 +16,27 @@ export function setToken(token) {
 }
 
 export function login(username, password) {
-  return (dispatch, getState, api) => {
-    dispatch({type: actionTypes.LOGIN_FETCH})
-    return api().login(username, password)
+  return function _api(dispatch, getState, api) {
+    return api.login(username, password)
       .then(response => {
         const token = response.data.key
-        console.log(response.data)
         dispatch(setToken(token))
-        dispatch({type: actionTypes.LOGIN_SUCCESS})
-        // window.location = '/'
         return Promise.resolve()
       })
       .catch(error => {
-        dispatch({type: actionTypes.LOGIN_ERROR})
         return Promise.reject(error)
       })
   }
 }
 
 export function logout() {
-  return (dispatch, getState, api) => {
-    const {token} = getState()
-    dispatch({type: actionTypes.LOGOUT_FETCH})
-    return api(token).logout()
+  return function _api(dispatch, getState, api) {
+    api.logout()
       .then(response => {
         dispatch(setToken(null))
-        dispatch({type: actionTypes.LOGOUT_SUCCESS})
       })
       .catch(error => {
-        dispatch({type: actionTypes.LOGOUT_ERROR})
+        console.log('err', error)
       })
   }
 }

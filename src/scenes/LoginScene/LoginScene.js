@@ -14,7 +14,7 @@ class LoginScene extends Component {
   }
 
   handleRedirect() {
-    this.props.history.push('/')
+    // this.props.history.push('/')
   }
 
   render() {

@@ -11,20 +11,18 @@ import '../semantic/dist/semantic.css';
 import styles from './index.css';
 
 import App from './components/App/App';
-import api from './api/apiClient'
+import ApiClient from './api/apiClient'
+import {apiMiddleware} from './lib/middleware'
 
 
 let root = document.createElement('root');
 root.id = 'root';
 document.body.appendChild(root);
 
-// let store = createStore(geoApp);
 const store = createStore(
   geoApp,
-  // applyMiddleware(thunk),
-  applyMiddleware(thunk.withExtraArgument(api))
+  applyMiddleware(apiMiddleware(new ApiClient()), thunk)
 );
-
 
 
 const render = Component => {

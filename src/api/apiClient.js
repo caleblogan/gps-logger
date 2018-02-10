@@ -2,41 +2,43 @@ import axios from 'axios'
 
 const API_BASE_URL = process.env.API_BASE_URL || 'http://localhost:8000/api'
 
-// export default function apiClient(store) {
-//   console.log('store:', store)
-//   return {
-//     login: login
-//   }
-// }
-
-export default function apiClient(token) {
-
-  const headers = token ? {
-      'Authorization': `Token ${token}`
-    } : {}
-  const instance = axios.create({
-    headers: headers,
-    baseURL: API_BASE_URL,
-  })
-  return {
-    login: login(instance),
-    logout: logout(instance),
-    getLogs: getLogs(instance),
+export default class ApiClient {
+  constructor() {
+    this.token = null
+    this.api = axios.create({
+      baseURL: API_BASE_URL,
+    })
   }
-}
 
-const login = api => (username, password) => {
-  return api.post(`/auth/login/`, {
+  isAuthed() {
+    return !!this.token
+  }
+
+  auth(token) {
+    this.token = token
+    this.api.defaults.headers.common['Authorization'] = `Token ${token}`
+  }
+
+  noauth() {
+    return axios.create({baseURL: API_BASE_URL, headers: {'Authorization': null}})
+  }
+
+  login(username, password) {
+    return this.noauth().post(`/auth/login/`, {
       username: username,
       password: password
     })
-}
+  }
 
-const logout = api => () => {
-  return api.post(`/auth/logout/`)
-}
+  logout() {
+    return this.api.post(`/auth/logout/`)
+      .then((response) => {
+        this.token = null
+        return Promise.resolve(response)
+      })
+  }
 
-const getLogs = api => () => {
-  console.log('logs:', api)
-  return api.get('/logs/')
+  getLogs() {
+    return this.api.get('/logs/')
+  }
 }
