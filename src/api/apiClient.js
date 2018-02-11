@@ -51,6 +51,10 @@ export default class ApiClient {
       })
   }
 
+  getUser()  {
+    return this.api.get('/auth/user/')
+  }
+
   getLogs() {
     return this.api.get('/logs/')
   }
@@ -58,4 +62,5 @@ export default class ApiClient {
   getAllPositions() {
     return this.api.get('/positions/')
   }
+
 }

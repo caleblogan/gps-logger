@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from django.http import Http404
-from django.shortcuts import get_list_or_404
+from django.shortcuts import get_list_or_404, get_object_or_404
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response

@@ -10,6 +10,9 @@ import LogFilter from "./LogFilter";
 import NewLog from "./NewLog";
 import {addLog, addLogPosition} from "../../actions/logActions";
 import {setActiveLog, setCurrentLocation} from "../../actions/geoLoggerActions";
+import {loadUser} from '../../actions/userActions';
+import {logout} from '../../actions/authActions';
+import UserDetail from "./UserDetail";
 
 class MainMenu extends Component {
   constructor(props) {
@@ -23,6 +26,11 @@ class MainMenu extends Component {
     this.handleAddNewLog = this.handleAddNewLog.bind(this);
     this.startRecording = this.startRecording.bind(this);
     this.stopRecording = this.stopRecording.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.dispatch(loadUser())
   }
 
   handleSearchChange(event) {
@@ -64,11 +72,20 @@ class MainMenu extends Component {
     event.preventDefault();
   }
 
+  handleLogout(event) {
+    event.preventDefault()
+    this.props.dispatch(logout())
+  }
+
   render() {
-    const { activeLog = {}, currentLocation } = this.props
+    const { activeLog = {}, currentLocation, token, user } = this.props
+    if (token) {
+      console.log('user:', user)
+    }
     return (
       <div className={styles.Menu}>
         <Menu fluid inverted vertical className={styles.infoMenu}>
+          <UserDetail isAuthenticated={!!token} user={user} handleLogout={this.handleLogout}/>
           <Menu.Item>
             {activeLog && activeLog.name ? (
               <div>
@@ -121,6 +138,8 @@ const mapStateToProps = state => {
     activeLogID: state.geoLogger.activeLogID,
     activeLog: getActiveLog(state.geoLogger.activeLogID, state.logs),
     currentLocation: state.geoLogger.currentLocation,
+    token: state.token,
+    user: state.user
   }
 }
 
