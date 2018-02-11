@@ -6,8 +6,6 @@ import { Dropdown } from 'semantic-ui-react'
 import styles from './UserDetail.css'
 
 
-
-
 const UserDetail = ({isAuthenticated, user, handleLogout}) => {
   const handleChange = event => {
     if (event.target.innerHTML === 'logout') {

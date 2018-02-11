@@ -13,6 +13,7 @@ import {setActiveLog, setCurrentLocation} from "../../actions/geoLoggerActions";
 import {loadUser} from '../../actions/userActions';
 import {logout} from '../../actions/authActions';
 import UserDetail from "./UserDetail";
+import LogInfo from "./LogInfo";
 
 class MainMenu extends Component {
   constructor(props) {
@@ -86,31 +87,14 @@ class MainMenu extends Component {
       <div className={styles.Menu}>
         <Menu fluid inverted vertical className={styles.infoMenu}>
           <UserDetail isAuthenticated={!!token} user={user} handleLogout={this.handleLogout}/>
-          <Menu.Item>
-            {activeLog && activeLog.name ? (
-              <div>
-                log: {activeLog.name}
-                <br />
-                <br />
-                <p>
-                  Current Location: <br /> {currentLocation.latitude}, {currentLocation.longitude}
-                </p>
-                <br />
-                <Button.Group>
-
-                  <Button positive onClick={this.startRecording}>start</Button>
-                  <Button onClick={this.stopRecording}>stop</Button>
-                </Button.Group>
-                <br />
-                <br />
-                <a href='#' onClick={this.handleDeleteLog}>delete</a>{' '}
-                <a href='#' onClick={this.handleEditLog}>edit</a>
-              </div>
-            ) : (
-              <div>No log selected</div>
-            )
-            }
-          </Menu.Item>
+          <LogInfo
+            log={activeLog}
+            currentLocation={currentLocation}
+            startRecording={this.startRecording}
+            stopRecording={this.stopRecording}
+            onDeleteLog={this.handleDeleteLog}
+            onEditLog={this.handleEditLog}
+          />
           <NewLog onSave={this.handleAddNewLog}/>
           <Menu.Item>
             <LogFilter onChange={this.handleSearchChange} value={this.state.searchValue} />
