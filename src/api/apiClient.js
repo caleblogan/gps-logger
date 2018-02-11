@@ -30,7 +30,7 @@ export default class ApiClient {
 
   /**
    * Creates an axios instance without auth
-   * for instance, login will fail if Authorization header is set.
+   * for instance, login will f
    * @returns {AxiosInstance}
    */
   noauth() {

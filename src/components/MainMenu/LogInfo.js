@@ -24,14 +24,13 @@ const LogInfo = ({
         </p>
         <br />
         <Button.Group>
-
           <Button positive onClick={startRecording}>start</Button>
           <Button onClick={stopRecording}>stop</Button>
         </Button.Group>
-        <br />
-        <br />
-        <a href='#' onClick={onDeleteLog}>delete</a>{' '}
-        <a href='#' onClick={onEditLog}>edit</a>
+        {/*<br />*/}
+        {/*<br />*/}
+        {/*<a href='#' onClick={onDeleteLog}>delete</a>{' '}*/}
+        {/*<a href='#' onClick={onEditLog}>edit</a>*/}
       </div>
     ) : (
       <div>No log selected</div>

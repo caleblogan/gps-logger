@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 
-import {Button, Grid, Icon, Message} from 'semantic-ui-react';
+import {Grid, Icon, Message} from 'semantic-ui-react';
 
 import styles from './GeoLogger.css';
 import MainMenu from "../../components/MainMenu/MainMenu";

@@ -7,7 +7,7 @@ import {CircleMarker, Map, Marker, Polyline, Popup, TileLayer, ZoomControl} from
 import styles from './MapContainer.css'
 
 const viewCenter = [51.505, -0.09];
-const zoom = 3;
+const zoom = 2;
 
 class MapContainer extends Component {
 
@@ -28,7 +28,7 @@ class MapContainer extends Component {
            attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
          />
          <Polyline color="lime" positions={positions} />
-         {positions.length &&
+         {positions.length > 0 &&
          <CircleMarker center={positions[0]} color="red" radius={8}>
            <Popup>
              <span>Start</span>

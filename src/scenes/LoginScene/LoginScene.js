@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 
 import {Header, Grid, Button} from 'semantic-ui-react';
 
+import styles from './LoginScene.css'
 import {login, logout} from '../../actions/authActions';
 import LoginForm from "./LoginForm";
 
@@ -17,24 +18,19 @@ class LoginScene extends Component {
     }
   }
 
-  handleLogout() {
-    this.props.dispatch(logout())
-  }
-
   handleRedirect() {
     this.props.history.push(REDIRECT_URL)
   }
 
   render() {
     return (
-      <Grid centered>
+      <Grid centered verticalAlign='middle' className={styles.LoginScene}>
         <Grid.Row>
           <Header as='h2'>Login</Header>
         </Grid.Row>
         <Grid.Row>
           <LoginForm dispatch={this.props.dispatch} redirect={this.handleRedirect.bind(this)}/>
         </Grid.Row>
-        <Button negative onClick={this.handleLogout.bind(this)}>Logout</Button>
       </Grid>
     );
   }
