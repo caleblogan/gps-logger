@@ -1,1 +1,1 @@
-web: gunicorn simplerest.wsgi
+web: gunicorn serversite.wsgi
