@@ -13,7 +13,7 @@ import {
   setGeolocationAvailable,
   setGeolocationEnabled
 } from "../../actions/geoLoggerActions";
-import {getLogs} from "../../actions/logActions";
+import {initLogs, loadAllPositions} from "../../actions/logActions";
 
 class GeoLogger extends Component {
   constructor(props) {
@@ -41,7 +41,12 @@ class GeoLogger extends Component {
       this.props.dispatch(setGeolocationAvailable(false))
       this.props.dispatch(setGeolocationEnabled(false))
     }
-    this.props.dispatch(getLogs())
+    if (this.props.token) {
+      this.props.dispatch(initLogs())
+        .then(() => {
+          this.props.dispatch(loadAllPositions())
+        })
+    }
     console.log('geo token:', this.props.token)
   }
 

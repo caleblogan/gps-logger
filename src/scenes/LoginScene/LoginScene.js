@@ -7,14 +7,22 @@ import {Header, Grid, Button} from 'semantic-ui-react';
 import {login, logout} from '../../actions/authActions';
 import LoginForm from "./LoginForm";
 
+const REDIRECT_URL = '/'
+
 class LoginScene extends Component {
+
+  componentDidMount() {
+    if (this.props.token) {
+      this.props.history.push(REDIRECT_URL)
+    }
+  }
 
   handleLogout() {
     this.props.dispatch(logout())
   }
 
   handleRedirect() {
-    // this.props.history.push('/')
+    this.props.history.push(REDIRECT_URL)
   }
 
   render() {
@@ -22,7 +30,6 @@ class LoginScene extends Component {
       <Grid centered>
         <Grid.Row>
           <Header as='h2'>Login</Header>
-          <p>toke {this.props.token}</p>
         </Grid.Row>
         <Grid.Row>
           <LoginForm dispatch={this.props.dispatch} redirect={this.handleRedirect.bind(this)}/>

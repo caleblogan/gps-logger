@@ -7,19 +7,19 @@ import {CircleMarker, Map, Marker, Polyline, Popup, TileLayer} from 'react-leafl
 import styles from './MapContainer.css'
 
 const viewCenter = [51.505, -0.09];
-const zoom = 5;
+const zoom = 1;
 
 class MapContainer extends Component {
 
-  getPositions(logs) {
-    return logs.coords.map(position => {
-      let {latitude, longitude} = position.coords
+  getPositions(log) {
+    return log.positions && log.positions.map(position => {
+      let {latitude, longitude} = position
       return [latitude, longitude]
     })
   }
 
   render() {
-    const positions = this.getPositions(this.props.logs)
+    const positions = this.getPositions(this.props.log) || []
     return (
       <div className={styles.MapContainer}>
        <Map className={styles.Map} center={viewCenter} zoom={zoom}>
@@ -50,7 +50,7 @@ class MapContainer extends Component {
 
 MapContainer.propTypes = {};
 
-function getActiveLogs(activeLogID, logs) {
+function getActiveLog(activeLogID, logs) {
   for (let log of logs) {
     if (log.id === activeLogID) {
       return log
@@ -60,7 +60,7 @@ function getActiveLogs(activeLogID, logs) {
 
 const mapStateToProps = state => {
   return {
-    logs: getActiveLogs(state.geoLogger.activeLogID, state.logs)
+    log: getActiveLog(state.geoLogger.activeLogID, state.logs) || {}
   }
 }
 

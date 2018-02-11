@@ -50,7 +50,7 @@ const LoginForm = ({
 );
 
 const LoginFormContainer = withFormik({
-  mapPropsToValues: props => ({ username: '', password: 'boomkin88' }),
+  mapPropsToValues: props => ({ username: '', password: '' }),
   validationSchema: yup.object().shape({
     username: yup.string().required(),
     password: yup.string().required(),
@@ -75,7 +75,5 @@ const LoginFormContainer = withFormik({
       })
   },
 })(LoginForm);
-
-
 
 export default LoginFormContainer

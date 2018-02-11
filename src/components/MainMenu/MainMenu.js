@@ -65,12 +65,12 @@ class MainMenu extends Component {
   }
 
   render() {
-    const { activeLog, currentLocation } = this.props
+    const { activeLog = {}, currentLocation } = this.props
     return (
       <div className={styles.Menu}>
         <Menu fluid inverted vertical className={styles.infoMenu}>
           <Menu.Item>
-            {activeLog.name ? (
+            {activeLog && activeLog.name ? (
               <div>
                 log: {activeLog.name}
                 <br />

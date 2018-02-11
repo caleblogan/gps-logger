@@ -2,24 +2,24 @@ import {actionTypes} from '../actions/logActions';
 
 const defaultLogs = [
   {
-    id: 0, name: 'log 0', coords: [
+    id: 0, name: 'log 0', positions: [
     {
-      coords: {latitude: 51.507351, longitude: -0.127758},
+      latitude: 51.507351, longitude: -0.127758,
     },
     {
-      coords: {latitude: 52.507351, longitude: -0.147758},
+      latitude: 52.507351, longitude: -0.147758,
     },
   ]
   },
   {
-    id: 1, name: 'log 1', coords: []
+    id: 1, name: 'log 1', positions: []
   },
   {
-    id: 2, name: 'log 2', coords: []
+    id: 2, name: 'log 2', positions: []
   },
 ]
 
-export default (state = defaultLogs, action) => {
+export default (state = [], action) => {
   switch (action.type) {
     case actionTypes.ADD_NEW_LOG:
       return [
@@ -27,7 +27,7 @@ export default (state = defaultLogs, action) => {
         {
           id: action.id,
           name: action.name,
-          coords: action.coords
+          positions: action.positions
         }
       ]
     case actionTypes.ADD_POSITION_TO_LOG:
@@ -37,12 +37,14 @@ export default (state = defaultLogs, action) => {
         }
         return {
           ...log,
-          coords: [
-            ...log.coords,
+          positions: [
+            ...log.positions,
             action.position
           ]
         }
       })
+    case actionTypes.SET_LOGS:
+      return [...action.logs]
     default:
       return state
   }

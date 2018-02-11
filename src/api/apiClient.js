@@ -54,4 +54,8 @@ export default class ApiClient {
   getLogs() {
     return this.api.get('/logs/')
   }
+
+  getAllPositions() {
+    return this.api.get('/positions/')
+  }
 }

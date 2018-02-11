@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LogFilter basic snapshot 1`] = `
+<div
+  className="ui inverted transparent icon input icon"
+>
+  <input
+    disabled={undefined}
+    onChange={[Function]}
+    placeholder="Search Logs..."
+    tabIndex={undefined}
+    type="text"
+    value={undefined}
+  />
+  <i
+    aria-hidden="true"
+    className="search icon"
+  />
+</div>
+`;
