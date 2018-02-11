@@ -107,7 +107,9 @@ export function loadAllPositions() {
     return api.getAllPositions()
       .then(response => {
         response.data.forEach(position => {
-          dispatch(addLogPosition({...position}, position.log))
+          console.log(position)
+          const {latitude, longitude, accuracy, date, log: id} = position
+          dispatch(addLogPositionCreator(id, {latitude, longitude, accuracy, date}))
         })
       })
       .catch(error => {

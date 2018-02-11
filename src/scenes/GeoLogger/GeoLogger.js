@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 
-import {Grid, Message} from 'semantic-ui-react';
+import {Button, Grid, Icon, Message} from 'semantic-ui-react';
 
 import styles from './GeoLogger.css';
 import MainMenu from "../../components/MainMenu/MainMenu";
@@ -19,12 +19,13 @@ class GeoLogger extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isMenuOpen: true,
+      isMenuOpen: false,
       geoAvailableDissmissed: false,
       geoEnabledDissmissed: false,
     }
 
     this.geoTracker = new GeoTracker()
+    this.toggleMenu = this.toggleMenu.bind(this)
   }
 
   componentDidMount() {
@@ -45,6 +46,7 @@ class GeoLogger extends Component {
       this.props.dispatch(initLogs())
         .then(() => {
           this.props.dispatch(loadAllPositions())
+
         })
     }
     console.log('geo token:', this.props.token)
@@ -62,8 +64,14 @@ class GeoLogger extends Component {
     })
   }
 
+  toggleMenu(event) {
+    this.setState(prevState => ({
+      isMenuOpen: !prevState.isMenuOpen
+    }))
+  }
+
   render() {
-    const {isMenuOpen, geoAvailableDissmissed, geoEnabledDissmissed} = this.state
+    let {isMenuOpen, geoAvailableDissmissed, geoEnabledDissmissed} = this.state
     const {isGeolocationAvailable, isGeolocationEnabled} = this.props
     return (
       <Grid className={styles.Grid}>
@@ -81,10 +89,14 @@ class GeoLogger extends Component {
         </ErrorBox>
         <Grid.Row className={styles.Row}>
           {
-            isMenuOpen &&
-            <Grid.Column width={4} className={styles.Col}>
+            isMenuOpen ? (
+            <Grid.Column mobile={14} tablet={4} computer={4} largeScreen={4} widescreen={4} className={styles.Col}>
               <MainMenu geoTracker={this.geoTracker} />
+              <Icon name='close' className={styles.CloseMenuButton} onClick={this.toggleMenu} />
             </Grid.Column>
+            ) : (
+              <Icon name='sidebar' className={styles.OpenMenuButton} onClick={this.toggleMenu} />
+            )
           }
           <Grid.Column width={isMenuOpen ? 12 : 16} className={styles.Col}>
             <MapContainer />

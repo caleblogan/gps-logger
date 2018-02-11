@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux'
 
-import {CircleMarker, Map, Marker, Polyline, Popup, TileLayer} from 'react-leaflet'
+import {CircleMarker, Map, Marker, Polyline, Popup, TileLayer, ZoomControl} from 'react-leaflet'
 
 import styles from './MapContainer.css'
 
 const viewCenter = [51.505, -0.09];
-const zoom = 1;
+const zoom = 3;
 
 class MapContainer extends Component {
 
@@ -22,7 +22,7 @@ class MapContainer extends Component {
     const positions = this.getPositions(this.props.log) || []
     return (
       <div className={styles.MapContainer}>
-       <Map className={styles.Map} center={viewCenter} zoom={zoom}>
+       <Map className={styles.Map} center={viewCenter} zoom={zoom} zoomControl={false}>
          <TileLayer
            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
            attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
@@ -42,6 +42,7 @@ class MapContainer extends Component {
            </Popup>
          </CircleMarker>
          }
+         <ZoomControl position="topright" />
        </Map>
       </div>
     );

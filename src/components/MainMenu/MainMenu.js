@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import styles from './MainMenu.css';
 
-import {Menu, Icon, Modal, Button} from 'semantic-ui-react';
+import {Menu, Icon, Modal, Button, Sidebar, Segment} from 'semantic-ui-react';
 import LogMenu from "./LogMenu";
 import LogFilter from "./LogFilter";
 import NewLog from "./NewLog";

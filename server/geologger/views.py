@@ -36,7 +36,7 @@ class LogPositionsList(generics.ListCreateAPIView, generics.DestroyAPIView):
     permission_classes = (permissions.IsAuthenticated, )
 
     def get_queryset(self):
-        return super().get_queryset().filter(log__owner=self.request.user)
+        return super().get_queryset().filter(log__owner=self.request.user, log__id=self.kwargs['pk'])
 
     def perform_create(self, serializer):
         serializer.validated_data['log'] = get_object_or_404(Log, pk=self.kwargs['pk'])
@@ -44,6 +44,9 @@ class LogPositionsList(generics.ListCreateAPIView, generics.DestroyAPIView):
             serializer.save()
         else:
             raise exceptions.PermissionDenied
+
+    def destroy(self, request, *args, **kwargs):
+        self.get_queryset().delete()
 
 
 class PositionList(generics.ListAPIView, generics.DestroyAPIView):
