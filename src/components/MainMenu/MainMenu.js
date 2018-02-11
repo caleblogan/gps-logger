@@ -80,9 +80,6 @@ class MainMenu extends Component {
 
   render() {
     const { activeLog = {}, currentLocation, token, user } = this.props
-    if (token) {
-      console.log('user:', user)
-    }
     return (
       <div className={styles.Menu}>
         <Menu fluid inverted vertical className={styles.infoMenu}>
@@ -96,9 +93,7 @@ class MainMenu extends Component {
             onEditLog={this.handleEditLog}
           />
           <NewLog onSave={this.handleAddNewLog}/>
-          <Menu.Item>
-            <LogFilter onChange={this.handleSearchChange} value={this.state.searchValue} />
-          </Menu.Item>
+          <LogFilter onChange={this.handleSearchChange} value={this.state.searchValue} />
         </Menu>
         <LogMenu activeItem={activeLog.id} logs={this.filteredLogs()} onClick={this.handleLogItemClick}/>
       </div>
