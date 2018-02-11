@@ -19,8 +19,8 @@ const LogFilter = ({onChange, value}) => {
 };
 
 LogFilter.propTypes = {
-  onChange: PropTypes.func,
-  value: PropTypes.string,
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
 };
 
 export default LogFilter;

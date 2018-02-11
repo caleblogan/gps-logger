@@ -1,5 +1,7 @@
 export const actionTypes = {
-  ADD_NEW_LOG: 'ADD_NEW_LOG',
+  ADD_LOG_FETCH: 'ADD_LOG_FETCH',
+  ADD_LOG_SUCCESS: 'ADD_LOG_SUCCESS',
+  ADD_LOG_FAILURE: 'ADD_LOG_FAILURE',
   ADD_POSITION_TO_LOG: 'ADD_POSITION_TO_LOG',
   SET_LOGS: 'SET_LOGS',
   GET_LOGS_FETCH: 'GET_LOGS_FETCH',
@@ -7,21 +9,20 @@ export const actionTypes = {
   GET_LOGS_FAILURE: 'GET_LOGS_FAILURE',
 }
 
-let nextLogID = 3
-export function addLog(name) {
+export function addLogCreator(id, name, positions = []) {
   return {
-    type: actionTypes.ADD_NEW_LOG,
-    id: nextLogID++,
-    name: name,
-    positions: []
+    type: actionTypes.ADD_LOG_SUCCESS,
+    id,
+    name,
+    positions: positions
   }
 }
 
-export function addLogPosition(position, logID) {
+export function addLogPositionCreator(logID, position) {
   return {
     type: actionTypes.ADD_POSITION_TO_LOG,
-    position,
-    logID
+    logID,
+    position
   }
 }
 
@@ -33,6 +34,51 @@ function setLogs(logs) {
 }
 
 /**
+ * Adds a new log. Only adds log to store if api transaction is a success.
+ * @returns {_api}
+ */
+export function addLog(_name) {
+  return function _api(dispatch, getState, api) {
+    dispatch({type: actionTypes.ADD_LOG_FETCH})
+    return api.addLog(_name)
+      .then(response => {
+        if (response.status === 201) {
+          const {id, name, positions} = response.data
+          dispatch(addLogCreator(id, name, positions))
+          console.log(response.data)
+        }
+      })
+      .catch(() => {
+        dispatch({type: actionTypes.ADD_LOG_FAILURE})
+      })
+  }
+}
+
+/**
+ * Adds a new position to the logID provided. Will only add log to store if api transaction is a success.
+ * @param _name
+ * @returns Promise
+ */
+export function addLogPosition(logID, _position) {
+  return function _api(dispatch, getState, api) {
+    dispatch({type: actionTypes.ADD_LOG_FETCH})
+    return api.addPosition(logID, _position)
+      .then(response => {
+        if (response.status === 201) {
+          const {latitude, longitude, accuracy, date} = response.data
+          dispatch(addLogPositionCreator(logID, {latitude, longitude, accuracy, date}))
+          console.log(response.data)
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+        dispatch({type: actionTypes.ADD_LOG_FAILURE})
+      })
+  }
+}
+
+
+/**
  * Loads the logs from the the api and initializes the store
  * @returns Promise
  */
@@ -41,7 +87,6 @@ export function initLogs() {
     dispatch({type: actionTypes.GET_LOGS_FETCH})
     return api.getLogs()
       .then(response => {
-        console.log(response)
         dispatch(setLogs(response.data.map(log => (
           {
             id: log.id,
@@ -61,7 +106,6 @@ export function loadAllPositions() {
   return function _api(dispatch, getState, api) {
     return api.getAllPositions()
       .then(response => {
-        console.log(response.data)
         response.data.forEach(position => {
           dispatch(addLogPosition({...position}, position.log))
         })

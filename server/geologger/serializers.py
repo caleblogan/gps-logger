@@ -5,6 +5,7 @@ from .models import Log, Position
 
 
 class PositionSerializer(serializers.HyperlinkedModelSerializer):
+    # log = serializers.PrimaryKeyRelatedField(queryset=Log.objects.all())
     log = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:

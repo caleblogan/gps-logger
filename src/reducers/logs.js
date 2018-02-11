@@ -1,27 +1,11 @@
 import {actionTypes} from '../actions/logActions';
 
-const defaultLogs = [
-  {
-    id: 0, name: 'log 0', positions: [
-    {
-      latitude: 51.507351, longitude: -0.127758,
-    },
-    {
-      latitude: 52.507351, longitude: -0.147758,
-    },
-  ]
-  },
-  {
-    id: 1, name: 'log 1', positions: []
-  },
-  {
-    id: 2, name: 'log 2', positions: []
-  },
-]
 
 export default (state = [], action) => {
   switch (action.type) {
-    case actionTypes.ADD_NEW_LOG:
+    case actionTypes.ADD_LOG_FETCH:
+      return [...state]
+    case actionTypes.ADD_LOG_SUCCESS:
       return [
         ...state,
         {
@@ -30,6 +14,8 @@ export default (state = [], action) => {
           positions: action.positions
         }
       ]
+    case actionTypes.ADD_LOG_FAILURE:
+      return [...state]
     case actionTypes.ADD_POSITION_TO_LOG:
       return state.map(log => {
         if (log.id !== action.logID) {

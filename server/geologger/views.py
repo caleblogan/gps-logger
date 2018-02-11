@@ -39,6 +39,7 @@ class LogPositionsList(generics.ListCreateAPIView, generics.DestroyAPIView):
         return super().get_queryset().filter(log__owner=self.request.user)
 
     def perform_create(self, serializer):
+        serializer.validated_data['log'] = get_object_or_404(Log, pk=self.kwargs['pk'])
         if serializer.validated_data['log'].owner == self.request.user:
             serializer.save()
         else:

@@ -15,7 +15,10 @@ export default (state = defaultLogger, action) => {
     case geoTypes.SET_CURRENT_LOCATION:
       return {
         ...state,
-        currentLocation: action.coords
+        currentLocation: {
+          latitude: action.latitude,
+          longitude: action.longitude
+        }
       }
     case logTypes.GET_LOGS_FETCH:
       return {

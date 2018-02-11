@@ -30,6 +30,7 @@ export default class ApiClient {
 
   /**
    * Creates an axios instance without auth
+   * for instance, login will fail if Authorization header is set.
    * @returns {AxiosInstance}
    */
   noauth() {
@@ -57,6 +58,24 @@ export default class ApiClient {
 
   getLogs() {
     return this.api.get('/logs/')
+  }
+
+  addLog(name) {
+    return this.api.post(
+      '/logs/',
+      {
+        name
+      }
+    )
+  }
+
+  addPosition(id, position) {
+    return this.api.post(
+      `logs/${id}/positions/`,
+      {
+        ...position
+      }
+    )
   }
 
   getAllPositions() {

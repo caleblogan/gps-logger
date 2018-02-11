@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import {Menu} from 'semantic-ui-react';
+import {Menu, Dimmer, Loader} from 'semantic-ui-react';
 
 import styles from './LogMenu.css';
 
@@ -26,10 +26,10 @@ class LogMenu extends React.Component {
   }
 
   render() {
-    const {activeItem, logs, onClick}= this.props
+    const {activeItem, logs, onClick, isLoading}= this.props
     return (
       <Menu fluid inverted vertical className={styles.LogMenu}>
-        {
+        {!isLoading ? (
           logs.map((log, idx) => (
             <Menu.Item
               key={log.id} id={log.id} name={log.name} active={activeItem === log.id}
@@ -38,6 +38,11 @@ class LogMenu extends React.Component {
               tabIndex={idx}
             />
           ))
+        ) : (
+          <Dimmer active>
+            <Loader />
+          </Dimmer>
+        )
         }
       </Menu>
     )

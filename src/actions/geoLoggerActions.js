@@ -26,9 +26,10 @@ export function setGeolocationEnabled(isEnabled) {
   }
 }
 
-export function setCurrentLocation(coords) {
+export function setCurrentLocation(latitude, longitude) {
   return {
     type: actionTypes.SET_CURRENT_LOCATION,
-    coords
+    latitude,
+    longitude
   }
 }

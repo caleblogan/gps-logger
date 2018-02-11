@@ -48,8 +48,13 @@ class MainMenu extends Component {
 
   startRecording() {
     this.props.geoTracker.startWatching(position => {
-      this.props.dispatch(addLogPosition(position, this.props.activeLogID));
-      this.props.dispatch(setCurrentLocation(position.coords))
+      const newPosition = {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude,
+        accuracy: position.coords.accuracy
+      }
+      this.props.dispatch(addLogPosition(this.props.activeLogID, newPosition));
+      this.props.dispatch(setCurrentLocation(position.coords.latitude, position.coords.longitude))
     })
   }
 
@@ -79,7 +84,7 @@ class MainMenu extends Component {
   }
 
   render() {
-    const { activeLog = {}, currentLocation, token, user } = this.props
+    const { activeLog = {}, currentLocation, token, user, logsLoading } = this.props
     return (
       <div className={styles.Menu}>
         <Menu fluid inverted vertical className={styles.infoMenu}>
@@ -95,7 +100,7 @@ class MainMenu extends Component {
           <NewLog onSave={this.handleAddNewLog}/>
           <LogFilter onChange={this.handleSearchChange} value={this.state.searchValue} />
         </Menu>
-        <LogMenu activeItem={activeLog.id} logs={this.filteredLogs()} onClick={this.handleLogItemClick}/>
+        <LogMenu isLoading={logsLoading} activeItem={activeLog.id} logs={this.filteredLogs()} onClick={this.handleLogItemClick}/>
       </div>
     )
   }
@@ -118,7 +123,8 @@ const mapStateToProps = state => {
     activeLog: getActiveLog(state.geoLogger.activeLogID, state.logs),
     currentLocation: state.geoLogger.currentLocation,
     token: state.token,
-    user: state.user
+    user: state.user,
+    logsLoading: state.geoLogger.logsLoading
   }
 }
 
