@@ -1,1 +1,1 @@
-api: gunicorn serversite.wsgi:application --workers 1 --log-file -
+api: gunicorn serversite.wsgi:application --workers 1 --log-file - --log-level debug
