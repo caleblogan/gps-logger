@@ -46,7 +46,7 @@ const LoginForm = ({
       <Message error content={errors.password} />
     }
     <Button disabled={isSubmitting}>login</Button>
-    <p>Test user -  username: testuser password: testuser</p>
+    <p>Test user -  username: testuser password: password123</p>
   </Form>
 );
 
