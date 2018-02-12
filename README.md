@@ -1,9 +1,15 @@
 # Gps Logger
 Small web app using react and django-rest-framework. Records coordinates using browsers geolocation service.
 Saves locations in memory if not logged in.
+demo: https://geologger-client.herokuapp.com/
 
 # Server Setup
-- TODO
+- clone repo
+- create virtual env
+- pip install
+- python manage.py migrate
+- python manage.py runserver
+
 #### Env
 - `DJANGO_SECRET_KEY` (set this for prod)
 - `PROD` (will turn debug off if set to any value)
