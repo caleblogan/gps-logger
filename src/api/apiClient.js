@@ -83,3 +83,10 @@ export default class ApiClient {
   }
 
 }
+
+export function apiCall(fn) {
+  return {
+    type: 'API_CALL',
+    fn
+  }
+}

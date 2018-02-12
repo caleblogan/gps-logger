@@ -1,3 +1,5 @@
+import {apiCall} from "../api/apiClient";
+
 export const actionTypes = {
   ADD_LOG_FETCH: 'ADD_LOG_FETCH',
   ADD_LOG_SUCCESS: 'ADD_LOG_SUCCESS',
@@ -38,20 +40,19 @@ function setLogs(logs) {
  * @returns {_api}
  */
 export function addLog(_name) {
-  return function _api(dispatch, getState, api) {
+  return apiCall((dispatch, getState, api) => {
     dispatch({type: actionTypes.ADD_LOG_FETCH})
     return api.addLog(_name)
       .then(response => {
         if (response.status === 201) {
           const {id, name, positions} = response.data
           dispatch(addLogCreator(id, name, positions))
-          console.log(response.data)
         }
       })
       .catch(() => {
         dispatch({type: actionTypes.ADD_LOG_FAILURE})
       })
-  }
+  })
 }
 
 /**
@@ -60,21 +61,20 @@ export function addLog(_name) {
  * @returns Promise
  */
 export function addLogPosition(logID, _position) {
-  return function _api(dispatch, getState, api) {
+  return apiCall((dispatch, getState, api) => {
     dispatch({type: actionTypes.ADD_LOG_FETCH})
     return api.addPosition(logID, _position)
       .then(response => {
         if (response.status === 201) {
           const {latitude, longitude, accuracy, date} = response.data
           dispatch(addLogPositionCreator(logID, {latitude, longitude, accuracy, date}))
-          console.log(response.data)
         }
       })
       .catch((error) => {
         console.log(error)
         dispatch({type: actionTypes.ADD_LOG_FAILURE})
       })
-  }
+  })
 }
 
 
@@ -83,7 +83,7 @@ export function addLogPosition(logID, _position) {
  * @returns Promise
  */
 export function initLogs() {
-  return function _api(dispatch, getState, api) {
+  return apiCall((dispatch, getState, api) => {
     dispatch({type: actionTypes.GET_LOGS_FETCH})
     return api.getLogs()
       .then(response => {
@@ -99,15 +99,14 @@ export function initLogs() {
       .catch(() => {
         dispatch({type: actionTypes.GET_LOGS_FAILURE})
       })
-  }
+  })
 }
 
 export function loadAllPositions() {
-  return function _api(dispatch, getState, api) {
+  return apiCall((dispatch, getState, api) => {
     return api.getAllPositions()
       .then(response => {
         response.data.forEach(position => {
-          console.log(position)
           const {latitude, longitude, accuracy, date, log: id} = position
           dispatch(addLogPositionCreator(id, {latitude, longitude, accuracy, date}))
         })
@@ -115,5 +114,5 @@ export function loadAllPositions() {
       .catch(error => {
         console.log(error)
       })
-  }
+  })
 }

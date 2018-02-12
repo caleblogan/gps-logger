@@ -15,10 +15,6 @@ const devConfig = merge([{
   devtool: 'cheap-module-eval-source-map',
   module: {
     rules: [
-      // {
-      //   test: /\.less$/,
-      //   use: ['style-loader', 'css-loader', 'less-loader']
-      // },
       {
         test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
         use: {
@@ -32,28 +28,40 @@ const devConfig = merge([{
         test: /^((?!semantic|leaflet).)*\.css$/,
         use: [
           'style-loader',
-          {loader: 'css-loader', options: {modules: true, importLoaders: 1, localIdentName: '[name]__[hash:base64:5]'}},
-          {loader: 'postcss-loader', options: {
-            plugins: [
-              require('postcss-import'),
-              require('postcss-cssnext'),
-            ]
-          }},
+          {
+            loader: 'css-loader', options: {modules: true, importLoaders: 1, localIdentName: '[name]__[hash:base64:5]'}
+          },
+          {
+            loader: 'postcss-loader', options: {
+              plugins: [
+                require('postcss-import'),
+                require('postcss-cssnext'),
+              ]
+            }
+          },
         ]
       },
       {
         test: /(semantic\.css|leaflet\.css)/,
         use: [
           'style-loader',
-          {loader: 'css-loader', options: {modules: false, importLoaders: 1}},
-          {loader: 'postcss-loader', options: {
-            plugins: [
-              require('postcss-import'),
-              require('postcss-cssnext'),
-            ]
-          }},
+          {
+            loader: 'css-loader', options: {modules: false, importLoaders: 1}
+          },
+          {
+            loader: 'postcss-loader', options: {
+              plugins: [
+                require('postcss-import'),
+                require('postcss-cssnext'),
+              ]
+            }
+          },
         ]
       },
+      // {
+      //   test: /\.less$/,
+      //   use: ['style-loader', 'css-loader', 'less-loader']
+      // },
       // {
       //   test: /semantic\.css/,
       //   use: globalCss.extract({

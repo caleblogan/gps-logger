@@ -1,4 +1,5 @@
 import * as utils from "../lib/utils";
+import {apiCall} from "../api/apiClient";
 
 export const actionTypes = {
   SET_TOKEN: 'SET_TOKEN',
@@ -19,7 +20,7 @@ export function setToken(token) {
 }
 
 export function login(username, password) {
-  return function _api(dispatch, getState, api) {
+  return apiCall((dispatch, getState, api) => {
     return api.login(username, password)
       .then(response => {
         const token = response.data.key
@@ -29,11 +30,11 @@ export function login(username, password) {
       .catch(error => {
         return Promise.reject(error)
       })
-  }
+  })
 }
 
 export function logout() {
-  return function _api(dispatch, getState, api) {
+  return apiCall((dispatch, getState, api) => {
     api.logout()
       .then(response => {
         dispatch(setToken(null))
@@ -41,5 +42,5 @@ export function logout() {
       .catch(error => {
         console.log('err', error)
       })
-  }
+  })
 }

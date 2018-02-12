@@ -1,3 +1,5 @@
+import {apiCall} from "../api/apiClient";
+
 export const actionTypes = {
   LOAD_USER_FETCH: 'LOAD_USER_FETCH',
   LOAD_USER_SUCCESS: 'LOAD_USER_SUCCESS',
@@ -11,7 +13,7 @@ function setUser(user) {
 }
 
 export function loadUser() {
-  return function _api(dispatch, getState, api) {
+  return apiCall((dispatch, getState, api) => {
     return api.getUser()
       .then(response => {
         const {
@@ -25,5 +27,5 @@ export function loadUser() {
       .catch(error => {
         console.log(error)
       })
-  }
+  })
 }

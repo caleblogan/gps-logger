@@ -11,7 +11,7 @@ import * as utils from "./utils";
 export default createStore(
   geoApp,
   applyMiddleware(
-    logger,
+    // logger,
     apiMiddleware(new ApiClient()),
     thunk
   )

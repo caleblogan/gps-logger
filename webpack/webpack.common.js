@@ -1,11 +1,12 @@
 const path = require('path');
+const webpack = require('webpack');
 const merge = require("webpack-merge");
 
 
 const config = {
   entry: ['babel-polyfill', 'react-hot-loader/patch', './src/index.js'],
   output: {
-    path: path.resolve(__dirname, './dist/'),
+    path: path.resolve(__dirname, '../dist/'),
     publicPath: '/',
     filename: 'bundle.js'
   },
@@ -22,8 +23,11 @@ const config = {
           }
         }
       },
+
     ]
   },
+  plugins: [
+  ]
 };
 
 module.exports = merge([config]);
