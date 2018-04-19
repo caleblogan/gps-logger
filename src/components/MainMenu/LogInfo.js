@@ -10,7 +10,8 @@ const LogInfo = ({
   startRecording,
   stopRecording,
   onDeleteLog,
-  onEditLog
+  onEditLog,
+  isRecording,
 }) => {
   return (
     <Menu.Item>
@@ -24,8 +25,8 @@ const LogInfo = ({
         </p>
         <br />
         <Button.Group>
-          <Button positive onClick={startRecording}>start</Button>
-          <Button onClick={stopRecording}>stop</Button>
+          {!isRecording && <Button positive onClick={startRecording}>start</Button>}
+          {isRecording && <Button onClick={stopRecording}>stop</Button>}
         </Button.Group>
         {/*<br />*/}
         {/*<br />*/}

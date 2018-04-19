@@ -48,12 +48,9 @@ class NewLog extends React.Component {
     }
   }
 
-  render() {
-    return (
-      <Modal
-        trigger={<Menu.Item onClick={this.open}><Icon inverted name='add circle'/> New Log</Menu.Item>}
-        open={this.state.open}
-      >
+  _renderContent() {
+    return this.props.isLoggedIn ? (
+      <React.Fragment>
         <Modal.Header>Create New Log</Modal.Header>
         <Modal.Content>
           <Input
@@ -67,6 +64,24 @@ class NewLog extends React.Component {
           <Button negative content='Cancel' onClick={this.close}/>
           <Button positive icon='checkmark' labelPosition='right' content='Save' onClick={this.handleSave}/>
         </Modal.Actions>
+      </React.Fragment>
+    ) : (
+      <React.Fragment>
+        <Modal.Header>You Must Be Logged in to Add a new Log</Modal.Header>
+        <Modal.Actions>
+          <Button negative content='Cancel' onClick={this.close}/>
+        </Modal.Actions>
+      </React.Fragment>
+    );
+  }
+
+  render() {
+    return (
+      <Modal
+        trigger={<Menu.Item onClick={this.open}><Icon inverted name='add circle'/> New Log</Menu.Item>}
+        open={this.state.open}
+      >
+        {this._renderContent()}
       </Modal>
     );
   }

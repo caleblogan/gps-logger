@@ -7,6 +7,7 @@ demo: https://geologger-client.herokuapp.com/
 - clone repo
 - create virtual env
 - pip install
+- cd server
 - python manage.py migrate
 - python manage.py runserver
 

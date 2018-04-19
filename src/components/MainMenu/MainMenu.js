@@ -17,10 +17,11 @@ import LogInfo from "./LogInfo";
 
 class MainMenu extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       searchValue: '',
-    }
+      isRecording: false,
+    };
 
     this.handleSearchChange = this.handleSearchChange.bind(this);
     this.handleLogItemClick = this.handleLogItemClick.bind(this);
@@ -42,11 +43,12 @@ class MainMenu extends Component {
     const searchValue = this.state.searchValue.toLowerCase().trim()
     const filteredIDS = Object.keys(this.props.logs).filter(logID => (
       this.props.logs[logID].name.toLowerCase().includes(searchValue)
-    ))
+    ));
     return filteredIDS.map(logID => this.props.logs[logID])
   }
 
   startRecording() {
+    this.setState({isRecording: true});
     this.props.geoTracker.startWatching(position => {
       const newPosition = {
         latitude: position.coords.latitude,
@@ -59,10 +61,12 @@ class MainMenu extends Component {
   }
 
   stopRecording() {
+    this.setState({isRecording: false});
     this.props.geoTracker.stopWatching()
   }
 
   handleLogItemClick(e, logID) {
+    this.setState({isRecording: false});
     this.props.dispatch(setActiveLog(logID))
   }
 
@@ -96,8 +100,9 @@ class MainMenu extends Component {
             stopRecording={this.stopRecording}
             onDeleteLog={this.handleDeleteLog}
             onEditLog={this.handleEditLog}
+            isRecording={this.state.isRecording}
           />
-          <NewLog onSave={this.handleAddNewLog}/>
+          <NewLog onSave={this.handleAddNewLog} isLoggedIn={this.props.isLoggedIn}/>
           <LogFilter onChange={this.handleSearchChange} value={this.state.searchValue} />
         </Menu>
         <LogMenu isLoading={logsLoading} activeItem={activeLog.id} logs={this.filteredLogs()} onClick={this.handleLogItemClick}/>
@@ -124,10 +129,11 @@ const mapStateToProps = state => {
     currentLocation: state.geoLogger.currentLocation,
     token: state.token,
     user: state.user,
-    logsLoading: state.geoLogger.logsLoading
+    isLoggedIn: !!state.token,
+    logsLoading: state.geoLogger.logsLoading,
   }
-}
+};
 
-const MainMenuContainer = connect(mapStateToProps)(MainMenu)
+const MainMenuContainer = connect(mapStateToProps)(MainMenu);
 
 export default MainMenuContainer;
